@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            position: relative;
+            height: 42px;
+            line-height: 42px;
+            padding: 0 15px;
+            border-bottom: 1px solid #f6f6f6;
+            background-color: #1E9FFF;
+            color: #fff;
+            border-radius: 2px 2px 0 0;
+            font-size: 14px;
+        }
+
+        .body {
+            position: relative;
+            padding: 10px 15px;
+            line-height: 24px;
+            background-color: #fff;
+        }
+
+        .card {
+            margin: 20% auto;
+        }
+    </style>
+    <title>三合一聚合扫码支付 自动识别 微信 支付宝 QQ</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="card">
+                <div class="header">三合一聚合扫码支付</div>
+                <div class="body">
+                    <div id="wan_Neng" ></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>
+<div id="code"></div>
+
+</body>
+</html>
+<script>
+    /*****************************************
+     * 小九实验室
+     * www.79xj.cn
+     * 聚合扫码支付
+     * （本地测试不行(本地不是云端) 必须需要主机挂在服务器上）
+     * 无需对接任何api 纯js完成
+     ****************************************/
+    $(function () {
+        var Ma = {
+            qq: "",
+            zfb: "",
+            wx: "",
+            testma: ""
+        }
+
+        if(navigator.userAgent.match(/Alipay/i)) {
+            // 支付宝
+            window.location.href=Ma.zfb
+        } else if(navigator.userAgent.match(/MicroMessenger\//i)) {
+            // 微信
+            $('#wan_Neng').qrcode(Ma.wx)
+            $(".header").html("请使用微信扫码支付")
+        } else if(navigator.userAgent.match(/QQ\//i)) {
+            // QQ
+            $('#wan_Neng').qrcode(Ma.qq)
+            $(".header").html("请使用QQ扫码支付")
+
+        } else {
+            // 其它
+            $url = window.location.href
+            // $("#wan_Neng").attr("src", Ma.testma +$url)
+            $('#wan_Neng').html("请使用微信QQ支付宝打开支付")
+
+        }
+        //获取网页中的canvas对象
+        var mycans=$('canvas')[0];
+        var img=img_can(mycans);
+        $('#wan_Neng').append(img);
+        $('canvas')[0].remove()
+
+    })
+    //禁用右击
+    document.oncontextmenu = function () {
+    return false;
+   } 
+   //禁用f12
+	document.onkeydown = function () {
+	if (window.event && window.event.keyCode == 123) {
+		window.event.returnValue = false;
+	}
+	}
+
+    /*****************************************
+     * 画布转img
+     * 输入参数：画布对象
+     * 输出参数：img
+     ****************************************/
+    function img_can(canvas) {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+</script>
